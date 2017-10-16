@@ -77,6 +77,16 @@ make mrproper defconfig
 # Enable CONFIG_DEVTMPFS and CONFIG_DEVTMPFS_MOUNT
 sed -i "s/.*CONFIG_DEVTMPFS.*/CONFIG_DEVTMPFS=y\nCONFIG_DEVTMPFS_MOUNT=y/" .config
 
+# Checks for prebuilt kernel.config file and uses it if it exists
+echo "Check if file exists"
+if [ -e "$SRC_DIR/minimal_config/kernel.config" ]
+then
+   echo "File found! Copying config over..."
+   cp $SRC_DIR/minimal_config/kernel.config ./.config
+else
+   echo "File Not found! Using default config..."
+fi
+
 make bzImage
 cp arch/x86/boot/bzImage $SRC_DIR/isoimage/kernel.gz
 cd $SRC_DIR/isoimage
