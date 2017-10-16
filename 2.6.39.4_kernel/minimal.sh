@@ -39,8 +39,20 @@ cd $SRC_DIR/sources/busybox-$BUSYBOX_VERSION
 # Configures a full-featured BusyBox w/o debugging
 make distclean defconfig
 
-# Creates a static linked Busybox binary 
+# Configures for a static linked Busybox binary 
 sed -i "s/.*CONFIG_STATIC.*/CONFIG_STATIC=y/" .config
+
+# Checks for prebuilt busybox.config file and uses it if it exists
+echo "Check if file exists"
+if [ -e "$SRC_DIR/minimal_config/busybox.config" ]
+then
+   echo "File found! Copying config over..."
+   cp $SRC_DIR/minimal_config/busybox.config ./.config
+else
+   echo "File Not found! Using default config..."
+fi
+
+# Builds busybox
 make busybox install
 
 # Remove the linuxrc shell script file... not needed
